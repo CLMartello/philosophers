@@ -3,7 +3,7 @@
 
 void	state_change(t_philo *philo)
 {
-	time_t	initial;
+	struct timeval	initial;
 
 	gettimeofday(&initial, NULL);
 	printf("TIME %d has taken a fork\n", philo->index);

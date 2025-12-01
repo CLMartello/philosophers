@@ -13,5 +13,7 @@ int	main(int argc, char **argv)
 		philo_die();
 	if (head->time_to_die <= (head->time_to_eat + head->time_to_sleep))
 		philo_die();*/
+	ft_print_parse(head);
+	free_all(head);
 	return (0);
 }

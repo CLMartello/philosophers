@@ -11,7 +11,7 @@ CFLAGS = -Wall -Werror -Wextra -g
 
 # Files #
 
-SRC = src/actions.c src/ft_atoi.c src/parse.c src/philo.c src/main.c
+SRC = src/actions.c src/ft_atoi.c src/parse.c src/philo.c src/main.c src/free.c
 
 OBJS = $(SRC:.c=.o)
 

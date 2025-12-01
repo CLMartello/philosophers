@@ -14,6 +14,7 @@ int	to_eat(t_head *head, t_philo *philo)
 	if (!forks)
 		return (0);
 	time_to_eat(head, philo, forks);
+	return (0);
 }
 void	time_to_eat(t_head *head, t_philo *philo, pthread_mutex_t *forks)
 {
