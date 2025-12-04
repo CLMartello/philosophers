@@ -1,41 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/04 16:45:54 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/04 16:59:14 by clumertz         ###   ########.fr       */
+/*   Created: 2025/12/04 16:49:41 by clumertz          #+#    #+#             */
+/*   Updated: 2025/12/04 17:00:38 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-int	init_philo_fork(t_head *head)
+void	ft_print_parse(t_head *head)
 {
 	int	i;
 
 	i = 0;
+	printf("number philo = %d\n", head->number_philo);
 	while (i < head->number_philo)
 	{
-		head->philos[i].index = i + 1;
-		head->philos[i].left = i;
-		head->philos[i].right = (i + 1) % head->number_philo;
-		head->philos[i].times_eaten = 0;
-		head->philos[i]->head = head;
-		if (pthread_create(&head->philos[i].id, NULL, routine,
-				(void *)head->philos[i]) != 0)
-			perror("pthread error");
-		head->forks[i].index = i;
-		if (pthread_mutex_init(&head->forks[i].fork, NULL) != 0)
-			perror("mutex error");
+		printf("philo index = %d\n", head->philos[i].index);
+		printf("philo to the right = %d\n", head->philos[i].right);
+		printf("philo to the left = %d\n", head->philos[i].left);
 		i++;
 	}
-	return (0);
-}
-
-int	wait_join(void)
-{
-	return (void);
+	printf("time to die = %d\n", head->time_to_die);
+	printf("time to eat = %d\n", head->time_to_eat);
+	printf("time to sleep = %d\n", head->time_to_sleep);
+	printf("number they must eat = %d\n", head->num_must_eat);
+	printf("FIM!\n");
 }
