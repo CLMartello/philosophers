@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:45:59 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/04 16:57:47 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/07 16:03:01 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ static void	init_mutex(t_head *head)
 		free_all(head);
 		return ;
 	}
+	head->print_flag = 1;
+	if (pthread_mutex_init(&head->dead, NULL) != 0)
+	{
+		free_all(head);
+		return ;
+	}
+	head->dead_flag = 0;
 }
 
 t_head	*init_head(int argc, char *argv[])
@@ -42,6 +49,7 @@ t_head	*init_head(int argc, char *argv[])
 		head->num_must_eat = ft_atoi_philo(argv[5]);
 	else
 		head->num_must_eat = -1;
+	head->dead_flag = -1;
 	init_mutex(head);
 	return (head);
 }
