@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:46:10 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/07 18:10:19 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:04:09 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <limits.h>
+
+typedef struct s_head t_head;
 
 typedef struct s_fork
 {
@@ -34,8 +37,8 @@ typedef struct s_philo
 	pthread_t		id;
 	int				time;
 	int				times_eaten;
-	struct timeval	last_meal;
-	void			*head;
+	long			last_meal;
+	t_head			*head;
 }					t_philo;
 
 typedef struct s_head
@@ -63,7 +66,7 @@ void	free_all(t_head *head);
 
 //Parse
 int		check_args(int argc, char **argv);
-int		ft_atoi_philo(char *nptr);
+long	ft_atoi_philo(char *nptr);
 t_head	*init_head(int argc, char *argv[]);
 
 //Parse utils
@@ -71,12 +74,20 @@ void	ft_print_parse(t_head *head);
 
 //Mutex utils
 void	print_mutex(t_head *head, t_philo *philo, int time, char *message);
+int		monitor_dead(t_head *head);
 
 //Philo
 int		init_philo_fork(t_head *head);
-int	wait_join(t_head *head);
+int		wait_join(t_head *head);
 
 //Routine
 void	*routine(void *arg);
+void	call_death(t_head *head, t_philo *philo);
+int		is_philo_dead(t_head *head, t_philo *philo);
+long	get_time(t_head *head);
+long	get_timestamp(t_head *head);
+
+//Free
+void	ft_error(t_head *head, int error);
 
 #endif

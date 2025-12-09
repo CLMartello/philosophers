@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:45:59 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/07 16:03:01 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:57:11 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ static void	init_mutex(t_head *head)
 {
 	if (pthread_mutex_init(&head->print, NULL) != 0)
 	{
-		free_all(head);
+		ft_error(head, 3);
 		return ;
 	}
 	head->print_flag = 1;
 	if (pthread_mutex_init(&head->dead, NULL) != 0)
 	{
-		free_all(head);
+		ft_error(head, 3);
 		return ;
 	}
 	head->dead_flag = 0;
@@ -34,14 +34,14 @@ t_head	*init_head(int argc, char *argv[])
 
 	head = malloc(sizeof(t_head));
 	if (!head)
-		perror("malloc");
+		ft_error(NULL, 2);
 	head->number_philo = ft_atoi_philo(argv[1]);
 	head->philos = malloc(head->number_philo * sizeof(t_philo));
 	if (!head->philos)
-		perror("malloc");
+		ft_error(head, 2);
 	head->forks = malloc(head->number_philo * sizeof(t_fork));
-	if (!head->philos)
-		perror("malloc");
+	if (!head->forks)
+		ft_error(head, 2);
 	head->time_to_die = ft_atoi_philo(argv[2]);
 	head->time_to_eat = ft_atoi_philo(argv[3]);
 	head->time_to_sleep = ft_atoi_philo(argv[4]);
@@ -60,7 +60,7 @@ int	check_args(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 	{
-		perror("Invalid number of arguments.");
+		ft_error(NULL, 0);
 		return (1);
 	}
 	i = 1;
@@ -68,7 +68,7 @@ int	check_args(int argc, char **argv)
 	{
 		if (ft_atoi_philo(argv[i]) == -1)
 		{
-			perror("Arguments must be positive numbers.");
+			ft_error(NULL, 1);
 			return (1);
 		}
 		i++;
