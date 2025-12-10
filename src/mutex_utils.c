@@ -6,44 +6,98 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:49:35 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/09 17:51:29 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/10 17:06:59 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	print_mutex(t_head *head, t_philo *philo, int time, char *message)
+void	print_mutex(t_table *table, t_philo *philo, int time, char *message)
 {
-	pthread_mutex_lock(&head->print);
+	if (is_dead(table) == 1)
+		return ;
+	pthread_mutex_lock(&table->print);
 	printf("%d %d %s", time, philo->index, message);
-	pthread_mutex_unlock(&head->print);
+	pthread_mutex_unlock(&table->print);
 }
 
-int	monitor_dead(t_head *head)
+int	is_dead(t_table *table)
 {
-	long	time;
+	int	value;
+
+	pthread_mutex_lock(&table->dead);
+	value = table->dead_flag;
+	pthread_mutex_unlock(&table->dead);
+	return (value);
+}
+
+int	have_philo_eat(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->number_philo)
+	{
+		if (table->num_must_eat > table->philos[i].times_eaten)
+			return (0);
+	}
+	return (1);
+}
+
+int	monitor(t_table *table)
+{
 	long	timestamp;
 	int		i;
-	
-	pthread_mutex_lock(&head->dead);
-	time = get_time(head);
-	while (1)
+
+	while (is_dead(table) != 1)
 	{
 		i = 0;
-		while (i < head->number_philo)
+		while (i < table->number_philo)
 		{
-			timestamp = time - head->philos[i].last_meal;
-			if (timestamp >= head->time_to_die)
+			pthread_mutex_lock(&table->eat);
+			timestamp = get_time(table) - table->philos[i].last_meal;
+			pthread_mutex_unlock(&table->eat);
+			if (timestamp >= table->time_to_die)
 			{
-				print_mutex(head, &head->philos[i], get_timestamp(head), "died\n");
-				head->dead_flag = 1;
-				pthread_mutex_unlock(&head->dead);
-				return (1);
+				print_mutex(table, &table->philos[i], get_timestamp(table),
+					"died\n");
+				pthread_mutex_lock(&table->dead);
+				table->dead_flag = 1;
+				pthread_mutex_unlock(&table->dead);
+				break ;
+			}
+			if (table->num_must_eat != -1)
+			{
+				if (is_philo_satisfied(table) == 1)
+					break ;
 			}
 			i++;
 		}
-		usleep(1000);
+		//usleep(1000);
 	}
-	pthread_mutex_unlock(&head->dead);
 	return (0);
+}
+
+int	is_philo_satisfied(t_table *table)
+{
+	int	i;
+	int	value;
+
+	i = 0;
+	value = 1;
+	while (i < table->num_must_eat)
+	{
+		pthread_mutex_lock(&table->eat);
+		if (table->philos[i].times_eaten <= table->num_must_eat)
+			value = 0;
+		pthread_mutex_unlock(&table->eat);
+		i++;
+	}
+	if (value == 1)
+	{
+		pthread_mutex_lock(&table->dead);
+		table->dead_flag = 1;
+		pthread_mutex_unlock(&table->dead);
+	}
+	return (value);
 }

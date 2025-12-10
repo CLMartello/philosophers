@@ -6,52 +6,58 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:45:59 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/09 17:57:11 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/10 17:04:47 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static void	init_mutex(t_head *head)
+static void	init_mutex(t_table *table)
 {
-	if (pthread_mutex_init(&head->print, NULL) != 0)
+	if (pthread_mutex_init(&table->print, NULL) != 0)
 	{
-		ft_error(head, 3);
+		ft_error(table, 3);
 		return ;
 	}
-	head->print_flag = 1;
-	if (pthread_mutex_init(&head->dead, NULL) != 0)
+	table->print_flag = 1;
+	if (pthread_mutex_init(&table->dead, NULL) != 0)
 	{
-		ft_error(head, 3);
+		ft_error(table, 3);
 		return ;
 	}
-	head->dead_flag = 0;
+	table->dead_flag = 0;
+	if (pthread_mutex_init(&table->eat, NULL) != 0)
+	{
+		ft_error(table, 3);
+		return ;
+	}
+	table->eat_flag = 1;
 }
 
-t_head	*init_head(int argc, char *argv[])
+t_table	*init_table(int argc, char *argv[])
 {
-	t_head	*head;
+	t_table	*table;
 
-	head = malloc(sizeof(t_head));
-	if (!head)
+	table = malloc(sizeof(t_table));
+	if (!table)
 		ft_error(NULL, 2);
-	head->number_philo = ft_atoi_philo(argv[1]);
-	head->philos = malloc(head->number_philo * sizeof(t_philo));
-	if (!head->philos)
-		ft_error(head, 2);
-	head->forks = malloc(head->number_philo * sizeof(t_fork));
-	if (!head->forks)
-		ft_error(head, 2);
-	head->time_to_die = ft_atoi_philo(argv[2]);
-	head->time_to_eat = ft_atoi_philo(argv[3]);
-	head->time_to_sleep = ft_atoi_philo(argv[4]);
+	table->number_philo = ft_atoi_philo(argv[1]);
+	table->philos = malloc(table->number_philo * sizeof(t_philo));
+	if (!table->philos)
+		ft_error(table, 2);
+	table->forks = malloc(table->number_philo * sizeof(t_fork));
+	if (!table->forks)
+		ft_error(table, 2);
+	table->time_to_die = ft_atoi_philo(argv[2]);
+	table->time_to_eat = ft_atoi_philo(argv[3]);
+	table->time_to_sleep = ft_atoi_philo(argv[4]);
 	if (argc == 6)
-		head->num_must_eat = ft_atoi_philo(argv[5]);
+		table->num_must_eat = ft_atoi_philo(argv[5]);
 	else
-		head->num_must_eat = -1;
-	head->dead_flag = -1;
-	init_mutex(head);
-	return (head);
+		table->num_must_eat = -1;
+	table->dead_flag = -1;
+	init_mutex(table);
+	return (table);
 }
 
 int	check_args(int argc, char **argv)

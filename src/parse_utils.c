@@ -6,28 +6,30 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:49:41 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/07 15:26:18 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:33:56 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	ft_print_parse(t_head *head)
+long	ft_atoi_philo(char *number)
 {
-	int	i;
+	int		i;
+	long	value;
 
 	i = 0;
-	printf("number philo = %d\n", head->number_philo);
-	while (i < head->number_philo)
+	value = 0;
+	if (number[0] == '+')
+		i++;
+	while (number[i] != '\0' && i < 12)
 	{
-		printf("philo index = %d\n", head->philos[i].index);
-		printf("philo to the right = %d\n", head->philos[i].right);
-		printf("philo to the left = %d\n", head->philos[i].left);
+		if (number[i] >= '0' && number[i] <= '9')
+			value = value * 10 + (number[i] - '0');
+		else
+			return (-1);
 		i++;
 	}
-	printf("time to die = %d\n", head->time_to_die);
-	printf("time to eat = %d\n", head->time_to_eat);
-	printf("time to sleep = %d\n", head->time_to_sleep);
-	printf("number they must eat = %d\n", head->num_must_eat);
-	printf("FIM!\n");
+	if (value > INT_MAX || i >= 12)
+		return (-1);
+	return (value);
 }

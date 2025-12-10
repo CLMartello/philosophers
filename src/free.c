@@ -6,40 +6,44 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:46:16 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/09 18:00:01 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/10 17:04:47 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	free_mutex(t_head *head)
+static void	free_mutex(t_table *table)
 {
 	int	i;
 
 	i = 0;
-	while (i < head->number_philo)
+	while (i < table->number_philo)
 	{
-		pthread_mutex_destroy(&head->forks[i].fork);
+		pthread_mutex_destroy(&table->forks[i].fork);
 		i++;
 	}
 }
 
-void	free_all(t_head *head)
+void	free_all(t_table *table)
 {
-	if (head && head->philos)
-		free(head->philos);
-	if (head && head->forks)
+	if (table && table->philos)
+		free(table->philos);
+	if (table && table->forks)
 	{
-		free_mutex(head);
-		free(head->forks);
+		free_mutex(table);
+		free(table->forks);
 	}
-	if (head->print_flag == 1)
-	 	pthread_mutex_destroy(&head->print);
-	if (head)
-		free(head);
+	if (table->print_flag == 1)
+		pthread_mutex_destroy(&table->print);
+	if (table->dead_flag > -1)
+		pthread_mutex_destroy(&table->dead);
+	if (table->eat_flag == 1)
+		pthread_mutex_destroy(&table->eat);
+	if (table)
+		free(table);
 }
 
-void	ft_error(t_head *head, int error)
+void	ft_error(t_table *table, int error)
 {
 	if (error == 0)
 		printf("Invalid number of arguments.\n");
@@ -53,7 +57,6 @@ void	ft_error(t_head *head, int error)
 		printf("Pthread create error.\n");
 	else if (error == 5)
 		printf("Pthread join error.\n");
-	if (head)
-		free_all(head);
-	
+	if (table)
+		free_all(table);
 }
