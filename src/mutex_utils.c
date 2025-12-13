@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:49:35 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/10 17:06:59 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/13 13:01:06 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	have_philo_eat(t_table *table)
 	return (1);
 }
 
-int	monitor(t_table *table)
+void	monitor(t_table *table)
 {
 	long	timestamp;
 	int		i;
@@ -66,16 +66,11 @@ int	monitor(t_table *table)
 				pthread_mutex_unlock(&table->dead);
 				break ;
 			}
-			if (table->num_must_eat != -1)
-			{
-				if (is_philo_satisfied(table) == 1)
-					break ;
-			}
+			if (table->num_must_eat != -1 && is_philo_satisfied(table) == 1)
+				break ;
 			i++;
 		}
-		//usleep(1000);
 	}
-	return (0);
 }
 
 int	is_philo_satisfied(t_table *table)
@@ -85,10 +80,10 @@ int	is_philo_satisfied(t_table *table)
 
 	i = 0;
 	value = 1;
-	while (i < table->num_must_eat)
+	while (i < table->number_philo)
 	{
 		pthread_mutex_lock(&table->eat);
-		if (table->philos[i].times_eaten <= table->num_must_eat)
+		if (table->philos[i].times_eaten < table->num_must_eat)
 			value = 0;
 		pthread_mutex_unlock(&table->eat);
 		i++;
