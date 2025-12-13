@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:45:59 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/10 17:04:47 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:33:48 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_table	*init_table(int argc, char *argv[])
 int	check_args(int argc, char **argv)
 {
 	int	i;
+	int	n;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -72,11 +73,13 @@ int	check_args(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		if (ft_atoi_philo(argv[i]) == -1)
+		n = ft_atoi_philo(argv[i]);
+		if (n == -1 || n == 0)
 		{
 			ft_error(NULL, 1);
 			return (1);
 		}
+		n = -3;
 		i++;
 	}
 	return (0);

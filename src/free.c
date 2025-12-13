@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:46:16 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/10 17:04:47 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:27:49 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_error(t_table *table, int error)
 	if (error == 0)
 		printf("Invalid number of arguments.\n");
 	else if (error == 1)
-		printf("Arguments must be positive numbers between 0 and INT_MAX.\n");
+		printf("Arguments must be positive numbers between 1 and INT_MAX.\n");
 	else if (error == 2)
 		printf("Malloc error.\n");
 	else if (error == 3)

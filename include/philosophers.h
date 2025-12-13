@@ -6,7 +6,7 @@
 /*   By: clumertz <clumertz@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 16:46:10 by clumertz          #+#    #+#             */
-/*   Updated: 2025/12/10 17:06:59 by clumertz         ###   ########.fr       */
+/*   Updated: 2025/12/13 13:57:49 by clumertz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ long	ft_atoi_philo(char *number);
 
 //Mutex utils
 void	print_mutex(t_table *table, t_philo *philo, int time, char *message);
-int		monitor(t_table *table);
+void	monitor(t_table *table);
 int		is_dead(t_table *table);
 int		is_philo_satisfied(t_table *table);
 
@@ -84,6 +84,7 @@ long	get_time(t_table *table);
 long	get_timestamp(t_table *table);
 int		decide_first_fork(t_philo *philo);
 int		decide_second_fork(t_philo *philo);
+void	only_one_philo(t_table *table);
 
 //Free
 void	free_all(t_table *table);
